@@ -20,13 +20,12 @@ public class Fenetre extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         //div
-        JPanel panneau = new JPanel();
+        JPanel panneau = new JPanel(new BorderLayout());
 
         setContentPane(panneau);
         //---------BOUTON-----------------
         JButton bouton = new JButton("Fermer");
 
-        panneau.add(bouton);
 
         bouton.addActionListener(e -> {
 
@@ -51,19 +50,19 @@ public class Fenetre extends JFrame {
         //--------------Change theme---------
 
         JButton boutonChangeTheme = new JButton("Change theme");
-        panneau.add(boutonChangeTheme);
+
         boutonChangeTheme.addActionListener(e -> {
             try {
 
                 if (themeSombre) {
                     themeSombre = false;
                     UIManager.setLookAndFeel(new FlatLightLaf());
-                }else {
-                    themeSombre=true;
+                } else {
+                    themeSombre = true;
                     UIManager.setLookAndFeel(new FlatDarkLaf());
                 }
                 SwingUtilities.updateComponentTreeUI(this);
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 System.out.println("Failed to initialize LaF");
             }
         });
@@ -72,7 +71,7 @@ public class Fenetre extends JFrame {
 
         String[] listeCivilite = {"M.", "Me.", "Mlle.", "Non precisé"};
         JComboBox<String> selectCivilite = new JComboBox(listeCivilite);
-        panneau.add(selectCivilite);
+
 
         selectCivilite.addActionListener(e -> {
             JComboBox comboBox = (JComboBox) e.getSource();
@@ -115,7 +114,7 @@ public class Fenetre extends JFrame {
                     }
                 }
         );
-        panneau.add(selectUtilisateur);
+
 
         //------BOUTON FORMULAIRE-----
 
@@ -131,7 +130,23 @@ public class Fenetre extends JFrame {
 
             }
         });
-        panneau.add(boutonFormulaire);
+
+        Box boxPrincipal = Box.createVerticalBox();
+        panneau.add(boxPrincipal, BorderLayout.CENTER);
+
+        Box boxMenu = Box.createHorizontalBox();
+        boxMenu.add(bouton);
+        boxMenu.add(boutonChangeTheme);
+        boxPrincipal.add(boxMenu);
+
+        boxPrincipal.add(Box.createRigidArea(new Dimension(1, 50)));
+
+
+        boxPrincipal.add(Champs.generate("Civilite", selectCivilite));
+        boxPrincipal.add(Champs.generate("Utilisateur", selectUtilisateur));
+
+
+        panneau.add(boutonFormulaire, BorderLayout.SOUTH);
 
         setVisible(true);
     }
